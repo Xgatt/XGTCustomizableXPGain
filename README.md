@@ -3,7 +3,9 @@
 ## Description
 This is a WeiDU mod for the Infinity Engine Enhanced Edition games (BGEE, BG2EE, EET) that lets your party members gain XP at different rates. 
 
-This is done through a book item — "Tome of the Masterful Learner" — added to the protagonist's inventory at game start. Right-click the book and choose "Study" to open a dialog that lets the reader set their own XP gain modifier from **-100%** (no XP at all) up to **+500%** (six times the normal rate), in predefined steps. **Requires EEex**.
+This is done through a book item — "Tome of the Masterful Learner" — added to the protagonist's inventory at game start. Right-click the book and choose "Study" to open a dialog that lets the reader set their own XP gain modifier from **-100%** (no XP at all) up to **+500%** (six times the normal rate), in predefined steps. 
+
+**NOTE: This mod Requires EEex**.
 
 Each party member's modifier is tracked independently on their own creature record, so you can have Charname gaining +50% XP while Imoen gains -25% and everyone else stays at the default 100%. The book travels with whoever picks it up — any party member holding it can study it to reconfigure their own rate. A "How fast is my team learning?" option dumps every member's current modifier to chat.
 
