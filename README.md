@@ -11,7 +11,7 @@ Each party member's modifier is tracked independently on their own creature reco
 
 Any change made through the book will only apply to FUTURE XP, so think of this as an on-the-fly XP adjustment system.
 
-This should ease the pain of playing with a double- or triple-class character in a party setting, since you can set those character to level a bit faster to make up for their lack of progress. Ideally, with this mod installed, you won't need to install any other global XP reduction mods (e.g. EET Tweaks components to reduce quest and kill XP). You can set your own curve with this so that early levels go fast, and you can slow yourself down on the fly if you find your growth outpacing the challenge. 
+This should ease the pain of playing with a double- or triple-class character in a party setting, since you can set those characters to level a bit faster to make up for their lack of progress. Ideally, with this mod installed, you won't need to install any other global XP reduction mods (e.g. EET Tweaks components to reduce quest and kill XP). You can set your own curve with this so that early levels go fast, and you can slow yourself down on the fly if you find your growth outpacing the challenge. 
 
 This also solves a major problem with XP cap removal combined with lots of new content mods, where you have to predict at install time how much XP you will gain throughout the saga and pre-reduce everything. Instead, with this mod you can just reduce or completely turn off XP gains for whoever is overleveled until you feel comfortable again.
 
