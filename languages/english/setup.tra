@@ -1,0 +1,68 @@
+// XGT Customizable XP Gain, American English
+
+// ---- Component name ----
+@1 = ~Enable configurable dynamic XP gain~
+
+// ---- Portrait-icon / effect-list labels ----
+@50 = ~Learning faster~
+@51 = ~Learning slower~
+
+// ---- Item strings ----
+@10 = ~Tome of the Masterful Learner~
+@11 = ~Tome of the Masterful Learner
+
+This unassuming tome promises its reader mastery over the process of learning itself. By employing the techniques contained within, one can slow down or accelerate the process of learning itself.~
+@12 = ~Study~
+
+// ---- Root dialogue ----
+@100 = ~To what end do you Study?~
+@101 = ~I seek to learn faster (increase XP gain).~
+@102 = ~I seek to slow my learning (decrease XP gain).~
+@103 = ~I will learn at a steady pace (reset to default XP gain).~
+@104 = ~I wish to know how fast my team is learning.~
+@105 = ~Nevermind. Put the book away.~
+
+// ---- Sub-dialogue ----
+@110 = ~By how much?~
+@111 = ~On second thought...~
+
+// ---- Increase percentages (+5%, +10%, +15%, +20%, +25%, +50%, +75%, +100%, +150%, +200%, +300%, +400%, +500%) ----
+@201 = ~+5%~
+@202 = ~+10%~
+@203 = ~+15%~
+@204 = ~+20%~
+@205 = ~+25%~
+@206 = ~+50%~
+@207 = ~+75%~
+@208 = ~+100%~
+@209 = ~+150%~
+@210 = ~+200%~
+@211 = ~+300%~
+@212 = ~+400%~
+@213 = ~+500%~
+
+// ---- Decrease percentages (-5% … -100%) ----
+@221 = ~-5%~
+@222 = ~-10%~
+@223 = ~-15%~
+@224 = ~-20%~
+@225 = ~-25%~
+@226 = ~-30%~
+@227 = ~-35%~
+@228 = ~-40%~
+@229 = ~-45%~
+@230 = ~-50%~
+@231 = ~-55%~
+@232 = ~-60%~
+@233 = ~-65%~
+@234 = ~-70%~
+@235 = ~-75%~
+@236 = ~-80%~
+@237 = ~-85%~
+@238 = ~-90%~
+@239 = ~-95%~
+@240 = ~-100%~
+
+// ---- Error strings ----
+@1000 = ~XGT Customizable XP Gain requires BG:EE, BG2:EE, or EET.~
+@1001 = ~XGT Customizable XP Gain requires EEex. Install EEex first: https://github.com/Bubb13/EEex~

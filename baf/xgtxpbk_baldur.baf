@@ -1,0 +1,9 @@
+IF
+    !PartyHasItem("XGTXPBK")
+    Global("XGT_XPGAIN_GIVEN","GLOBAL",0)
+THEN
+    RESPONSE #100
+        SetGlobal("XGT_XPGAIN_GIVEN","GLOBAL",1)
+        GiveItemCreate("XGTXPBK",Player1,1,0,0)
+        Continue()
+END

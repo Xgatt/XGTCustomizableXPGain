@@ -1,0 +1,117 @@
+/* XGT Customizable XP Gain
+ *
+ * Adds a book item ("Tome of the Masterful Learner") that lets the
+ * player set per-character XP gain modifiers. Interception happens
+ * at runtime via an op403 (ScreenEffects) listener attached to each
+ * non-default party member; the listener mutates incoming op104/
+ * timing=1 events (the engine's sole XP-grant path) in place.
+ *
+ * Progression:
+ *   Decrease: -5%, -10%, ... -100% (5% steps; 20 values)
+ *   Increase: +5%, +10%, +15%, +20%, +25%, +50%, +75%, +100%,
+ *             +150%, +200%, +300%, +400%, +500% (13 values)
+ *
+ * Requires EEex.
+ */
+
+BACKUP ~weidu_external/backup/XGTCustomizableXPGain~
+AUTHOR ~XGT~
+VERSION ~v0.4.0-alpha~
+
+AUTO_TRA ~XGTCustomizableXPGain/languages/%s~
+
+LANGUAGE ~English~
+         ~english~
+         ~XGTCustomizableXPGain/languages/english/setup.tra~
+
+// ============================================================
+// Component 0: Enable configurable dynamic XP gain
+// ============================================================
+BEGIN @1
+DESIGNATED 0
+LABEL ~XGTCustomizableXPGain-Main~
+
+REQUIRE_PREDICATE (GAME_IS ~bgee bg2ee eet~) @1000
+REQUIRE_PREDICATE (MOD_IS_INSTALLED ~EEex/EEex.tp2~ ~0~ OR MOD_IS_INSTALLED ~EEex/EEex.tp2~ ~1~) @1001
+
+// ------------------------------------------------------------
+// 1. Install the book item XGTXPBK.ITM.
+// ------------------------------------------------------------
+COPY ~XGTCustomizableXPGain/itm/xgtxpbk.itm~ ~override/XGTXPBK.ITM~
+  SAY NAME1 @10
+  SAY NAME2 @10
+  SAY UNIDENTIFIED_DESC @11
+  SAY DESC @11
+
+// ------------------------------------------------------------
+// 2. Append two custom rows to statdesc.2da for the cosmetic
+//    "Learning faster" / "Learning slower" portrait icons.
+// ------------------------------------------------------------
+OUTER_SET statdesc_row_faster = 0
+OUTER_SET statdesc_row_slower = 0
+COPY_EXISTING ~statdesc.2da~ ~override~
+  COUNT_2DA_ROWS 3 cnt
+  INNER_ACTION BEGIN
+    OUTER_SET statdesc_row_faster = %cnt%
+    OUTER_SET statdesc_row_slower = %cnt% + 1
+  END
+BUT_ONLY
+
+OUTER_SET strref_faster = RESOLVE_STR_REF (@50)
+OUTER_SET strref_slower = RESOLVE_STR_REF (@51)
+
+APPEND ~statdesc.2da~ ~%statdesc_row_faster% %strref_faster% SPPR101C~ UNLESS ~%strref_faster%~
+APPEND ~statdesc.2da~ ~%statdesc_row_slower% %strref_slower% SPPR105C~ UNLESS ~%strref_slower%~
+
+// ------------------------------------------------------------
+// 3. Generate cosmetic-icon SPLs from the minimal header template.
+//    XGTXPIU: opcode 142 pointing at the "Learning faster" row
+//    XGTXPID: opcode 142 pointing at the "Learning slower" row
+//    XGTXPIR: opcode 321 cleanup that removes either XGTXPIU or
+//             XGTXPID effects on the target (by source resref).
+// ------------------------------------------------------------
+COPY ~XGTCustomizableXPGain/spl/xgtxptpl.spl~ ~override/XGTXPIU.SPL~
+  WRITE_LONG 0x08 0xffffffff
+  WRITE_LONG 0x0C 0xffffffff
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 142 target = 2 timing = 9 parameter2 = statdesc_row_faster END
+
+COPY ~XGTCustomizableXPGain/spl/xgtxptpl.spl~ ~override/XGTXPID.SPL~
+  WRITE_LONG 0x08 0xffffffff
+  WRITE_LONG 0x0C 0xffffffff
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 142 target = 2 timing = 9 parameter2 = statdesc_row_slower END
+
+COPY ~XGTCustomizableXPGain/spl/xgtxptpl.spl~ ~override/XGTXPIR.SPL~
+  WRITE_LONG 0x08 0xffffffff
+  WRITE_LONG 0x0C 0xffffffff
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 321 target = 2 timing = 0 STR_VAR resource = XGTXPIU END
+  LPF ADD_SPELL_EFFECT INT_VAR opcode = 321 target = 2 timing = 0 STR_VAR resource = XGTXPID END
+
+// ------------------------------------------------------------
+// 4. Copy the Lua handler. Defines XGTXPOP (op403 handler),
+//    XGT_SetMod (dialog action), and XGT_ShowParty (diagnostic).
+// ------------------------------------------------------------
+COPY ~XGTCustomizableXPGain/lua/m_xgtxpg.lua~ ~override/M_XGTXPG.lua~
+
+// ------------------------------------------------------------
+// 5. Compile the book's right-click dialogue.
+// ------------------------------------------------------------
+COMPILE ~XGTCustomizableXPGain/dlg/xgtxpbk.d~ USING ~XGTCustomizableXPGain/languages/english/setup.tra~
+
+// ------------------------------------------------------------
+// 6. Wire the book to the dialogue via itemdial.2da.
+// ------------------------------------------------------------
+COPY_EXISTING ~itemdial.2da~ ~override~
+  APPEND_FILE ~XGTCustomizableXPGain/2da/itemdial_add.txt~
+  REPLACE ~_STUDY_~ @12
+BUT_ONLY
+
+// ------------------------------------------------------------
+// 7. Give the book to the protagonist at game start.
+// ------------------------------------------------------------
+EXTEND_TOP ~baldur.bcs~ ~XGTCustomizableXPGain/baf/xgtxpbk_baldur.baf~
+
+// ------------------------------------------------------------
+// Thanks to Bubb (author of EEex) for technical guidance on the
+// op403 + op104 interception pattern and for suggesting op146
+// param2=1 over the action-queue route for the cosmetic SPLs.
+// ------------------------------------------------------------
