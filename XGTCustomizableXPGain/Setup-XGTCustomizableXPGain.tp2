@@ -16,7 +16,7 @@
 
 BACKUP ~weidu_external/backup/XGTCustomizableXPGain~
 AUTHOR ~XGT~
-VERSION ~v0.4.0-alpha~
+VERSION ~v0.4.1-alpha~
 
 AUTO_TRA ~XGTCustomizableXPGain/languages/%s~
 
@@ -27,7 +27,7 @@ LANGUAGE ~English~
 // ============================================================
 // Component 0: Enable configurable dynamic XP gain
 // ============================================================
-BEGIN @1
+BEGIN ~Enable configurable dynamic XP gain~
 DESIGNATED 0
 LABEL ~XGTCustomizableXPGain-Main~
 
