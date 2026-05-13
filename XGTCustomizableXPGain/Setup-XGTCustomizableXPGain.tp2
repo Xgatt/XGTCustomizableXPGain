@@ -16,7 +16,7 @@
 
 BACKUP ~weidu_external/backup/XGTCustomizableXPGain~
 AUTHOR ~XGT~
-VERSION ~v0.4.1-alpha~
+VERSION ~v0.5.0-alpha~
 
 AUTO_TRA ~XGTCustomizableXPGain/languages/%s~
 
@@ -44,24 +44,47 @@ COPY ~XGTCustomizableXPGain/itm/xgtxpbk.itm~ ~override/XGTXPBK.ITM~
   SAY DESC @11
 
 // ------------------------------------------------------------
-// 2. Append two custom rows to statdesc.2da for the cosmetic
-//    "Learning faster" / "Learning slower" portrait icons.
+// 2. Ship portrait-status-icon BAMs and append two custom rows
+//    to statdesc.2da for the cosmetic "Learning faster" /
+//    "Learning slower" icons.
+//
+//    The BAMs are vanilla SPPR101C (Bless) / SPPR105C (Curse)
+//    extracted from BG2:EE's GUIICON.BIF and renamed so that UI
+//    overhauls (LeUI, Infinity UI, remastered_spell_icons) that
+//    replace the SPPR___C series with higher-resolution
+//    spellbook art cannot clobber our portrait icons. See
+//    bam/README-regenerate.txt for regeneration instructions.
 // ------------------------------------------------------------
+COPY ~XGTCustomizableXPGain/bam/XGTXPIU.BAM~ ~override/XGTXPIU.BAM~
+COPY ~XGTCustomizableXPGain/bam/XGTXPID.BAM~ ~override/XGTXPID.BAM~
+
+// Next-available row ID = MAX(column 0) + 1. COUNT_2DA_ROWS gives
+// the row *count*, which collides when prior mods (e.g. A7-Wares-
+// OfThePlanes) appended their own custom IDs and the column-0
+// sequence has gaps or runs past the row count.
 OUTER_SET statdesc_row_faster = 0
 OUTER_SET statdesc_row_slower = 0
 COPY_EXISTING ~statdesc.2da~ ~override~
   COUNT_2DA_ROWS 3 cnt
+  SET max_id = 0
+  FOR (r = 0; r < cnt; r = r + 1) BEGIN
+    READ_2DA_ENTRY r 0 3 cur_id_str
+    SET cur_id = cur_id_str
+    PATCH_IF (cur_id > max_id) BEGIN
+      SET max_id = cur_id
+    END
+  END
   INNER_ACTION BEGIN
-    OUTER_SET statdesc_row_faster = %cnt%
-    OUTER_SET statdesc_row_slower = %cnt% + 1
+    OUTER_SET statdesc_row_faster = %max_id% + 1
+    OUTER_SET statdesc_row_slower = %max_id% + 2
   END
 BUT_ONLY
 
 OUTER_SET strref_faster = RESOLVE_STR_REF (@50)
 OUTER_SET strref_slower = RESOLVE_STR_REF (@51)
 
-APPEND ~statdesc.2da~ ~%statdesc_row_faster% %strref_faster% SPPR101C~ UNLESS ~%strref_faster%~
-APPEND ~statdesc.2da~ ~%statdesc_row_slower% %strref_slower% SPPR105C~ UNLESS ~%strref_slower%~
+APPEND ~statdesc.2da~ ~%statdesc_row_faster% %strref_faster% XGTXPIU~ UNLESS ~%strref_faster%~
+APPEND ~statdesc.2da~ ~%statdesc_row_slower% %strref_slower% XGTXPID~ UNLESS ~%strref_slower%~
 
 // ------------------------------------------------------------
 // 3. Generate cosmetic-icon SPLs from the minimal header template.
