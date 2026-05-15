@@ -64,5 +64,5 @@ This unassuming tome promises its reader mastery over the process of learning it
 @240 = ~-100%~
 
 // ---- Error strings ----
-@1000 = ~XGT Customizable XP Gain requires BG:EE, BG2:EE, or EET.~
+@1000 = ~XGT Customizable XP Gain requires BG:EE, BG2:EE, IWD:EE, or EET.~
 @1001 = ~XGT Customizable XP Gain requires EEex. Install EEex first: https://github.com/Bubb13/EEex~

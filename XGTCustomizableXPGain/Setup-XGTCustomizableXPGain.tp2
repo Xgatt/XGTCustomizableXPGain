@@ -16,7 +16,7 @@
 
 BACKUP ~weidu_external/backup/XGTCustomizableXPGain~
 AUTHOR ~XGT~
-VERSION ~v0.5.0-alpha~
+VERSION ~v0.6.0-alpha~
 
 AUTO_TRA ~XGTCustomizableXPGain/languages/%s~
 
@@ -31,7 +31,7 @@ BEGIN ~Enable configurable dynamic XP gain~
 DESIGNATED 0
 LABEL ~XGTCustomizableXPGain-Main~
 
-REQUIRE_PREDICATE (GAME_IS ~bgee bg2ee eet~) @1000
+REQUIRE_PREDICATE (GAME_IS ~bgee bg2ee iwdee eet~) @1000
 REQUIRE_PREDICATE (MOD_IS_INSTALLED ~EEex/EEex.tp2~ ~0~ OR MOD_IS_INSTALLED ~EEex/EEex.tp2~ ~1~) @1001
 
 // ------------------------------------------------------------
@@ -130,8 +130,21 @@ BUT_ONLY
 
 // ------------------------------------------------------------
 // 7. Give the book to the protagonist at game start.
+//    Extend every continuous world script present in the target
+//    game so the book is granted on a direct SoD (bdbaldur.bcs)
+//    or ToB (baldur25.bcs) start, not only the BG1/SoA start
+//    (baldur.bcs). FILE_EXISTS_IN_GAME skips scripts the game
+//    doesn't have (plain BGEE / IWDEE ship only baldur.bcs).
+//    EXTEND_BOTTOM (not _TOP): on a fresh BG2:EE SoA start the
+//    block must run after the engine's own start-of-game world
+//    script setup, else the book is given too early and wiped
+//    while the GLOBAL guard stays set — losing it permanently.
 // ------------------------------------------------------------
-EXTEND_TOP ~baldur.bcs~ ~XGTCustomizableXPGain/baf/xgtxpbk_baldur.baf~
+ACTION_FOR_EACH worldscript IN baldur bdbaldur baldur25 BEGIN
+  ACTION_IF FILE_EXISTS_IN_GAME ~%worldscript%.bcs~ BEGIN
+    EXTEND_BOTTOM ~%worldscript%.bcs~ ~XGTCustomizableXPGain/baf/xgtxpbk_baldur.baf~
+  END
+END
 
 // ------------------------------------------------------------
 // Thanks to Bubb (author of EEex) for technical guidance on the

@@ -1,7 +1,7 @@
 # XGTCustomizableXPGain
 
 ## Description
-This is a WeiDU mod for the Infinity Engine Enhanced Edition games (BGEE, BG2EE, EET) that lets your party members gain XP at different rates. 
+This is a WeiDU mod for the Infinity Engine Enhanced Edition games (BGEE, BG2EE, IWDEE, EET) that lets your party members gain XP at different rates. 
 
 This is done through a book item — "Tome of the Masterful Learner" — added to the protagonist's inventory at game start. Right-click the book and choose "Study" to open a dialog that lets the reader set their own XP gain modifier from **-100%** (no XP at all) up to **+500%** (six times the normal rate), in predefined steps. 
 
@@ -16,7 +16,7 @@ This should ease the pain of playing with a double- or triple-class character in
 This also solves a major problem with XP cap removal combined with lots of new content mods, where you have to predict at install time how much XP you will gain throughout the saga and pre-reduce everything. Instead, with this mod you can just reduce or completely turn off XP gains for whoever is overleveled until you feel comfortable again.
 
 ## Compatibility and Installation Order
-This mod is extremely lightweight. It does **not** touch any CRE, BCS, DLG, or ITM files except installing its own book and a single `EXTEND_TOP` on `baldur.bcs` to hand the book to Player1 at game start. All XP interception happens at runtime through EEex's op403 (ScreenEffects) hook — there is no install-time patching of creatures, scripts, or existing XP-granting actions.
+This mod is extremely lightweight. It does **not** touch any CRE, BCS, DLG, or ITM files except installing its own book and an `EXTEND_BOTTOM` on the game's continuous world script(s) (`baldur.bcs`, plus `bdbaldur.bcs`/`baldur25.bcs` where present) to hand the book to Player1 at game start. All XP interception happens at runtime through EEex's op403 (ScreenEffects) hook — there is no install-time patching of creatures, scripts, or existing XP-granting actions.
 
 Install order does not matter. It can safely go anywhere in your load order, early or late, and will coexist with XP-modifying tweak mods (subrace XP multipliers, XP book tweaks, quest XP scalers, etc.) without conflict. Though, as I've mentioned earlier, you won't need any other XP scalers with this added. Just needs to be installed sometime after EEEx.
 
